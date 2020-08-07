@@ -10,6 +10,7 @@
 
 #include "compare.h"
 #include "reference_calc.h"
+#include "time.h"
 
 void preProcess(unsigned int **inputVals,
                 unsigned int **inputPos,
@@ -111,10 +112,16 @@ int main(int argc, char **argv) {
   thrust::host_vector<unsigned int> h_outputVals(numElems);
   thrust::host_vector<unsigned int> h_outputPos(numElems);
 
+  clock_t start,end;
+  
+  start = clock();
   reference_calculation(&h_inputVals[0], &h_inputPos[0],
 						&h_outputVals[0], &h_outputPos[0],
 						numElems);
+  end = clock();
 
+  std::cout << "The Reference_calculation ran time: " << 
+              (double)(end - start) / CLOCKS_PER_SEC * 1000 << " msecs \n";
   //postProcess(valsPtr, posPtr, numElems, reference_file);
 
   //compareImages(reference_file, output_file, useEpsCheck, perPixelError, globalError);
